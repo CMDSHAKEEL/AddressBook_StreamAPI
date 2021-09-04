@@ -1,4 +1,5 @@
 package com.bridglabz;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -8,6 +9,7 @@ public class AddressBookManager {
     public Map<String, ArrayList<AddressBookBluePrint>> multiBook = new HashMap<>();
     public Map<String, ArrayList<AddressBookBluePrint>> cityList = new HashMap<>();
     public Map<String, ArrayList<AddressBookBluePrint>> stateList = new HashMap<>();
+    public Map<Integer, ArrayList<AddressBookBluePrint>> zipList = new HashMap<>();
 
     Scanner sc = new Scanner(System.in);
 
@@ -91,7 +93,7 @@ public class AddressBookManager {
     }
 
     //sorting and printing using api streams and lambda exp for each
-    public void viewPersonsByCityOrState() {
+    public void viewPersonsByCityState() {
         System.out.println("Enter 1:city 2:state");
         int opt = sc.nextInt();
         switch (opt){
@@ -113,7 +115,7 @@ public class AddressBookManager {
         }
     }
     //Counting persons as per city's and states
-    public void countPersonsByCityOrState(){
+    public void countPersonsByCityState(){
         System.out.println("Enter 1:city 2:state");
         int opt = sc.nextInt();
         switch (opt){
@@ -137,6 +139,22 @@ public class AddressBookManager {
         book.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(System.out::println);
     }
 
+    //sort as per City State Zip
+    public void sortCityStateZip(){
+        System.out.println("sort by 1:city 2:state 3:zip");
+        int opt = sc.nextInt();
+        switch (opt){
+            case 1:
+                cityList.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(System.out::println);
+                break;
+            case 2:
+                stateList.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(System.out::println);
+                break;
+            case 3:
+
+        }
+    }
+
     //here is adding all the all collections
     private void callAddressBookTemp(String bookName,
                                      String firstName, String lastName,
@@ -149,7 +167,21 @@ public class AddressBookManager {
         multiBook.put(bookName, detailedEntries);
         cityList.put(city, detailedEntries);
         stateList.put(state, detailedEntries);
+        zipList.put(zip, detailedEntries);
     }
+
+    //write data in file
+    public void writeAddressBookInFiles(){
+        new AdressBookFileIO().writeData(detailedEntries);
+        System.out.println("Data stored successfully in AddressBook.txt");
+    }
+
+    //read data from file
+    public void readAddressBookInFiles(){
+        new AdressBookFileIO().readData();
+        System.out.println("Data Read successfully From AddressBook.txt");
+    }
+
 
     //edit contact as per parameter
     public void editContact() {
@@ -228,7 +260,7 @@ public class AddressBookManager {
         boolean conditon = true;
         while (conditon) {
             System.out.println("enter 1:addContact 2:editContact 3:viewPersonByCity 4:viewPersonByState 5:viewPersonsByCityOrState " +
-                    "6:countPersonsByCityOrState 7:sortAlphabetically or 0 to quit");
+                    "6:countPersonsByCityState 7:sortAlphabetically 8:sortCityStateZip 9:Write address in system file 10:Read address in system file or 0 to quit");
             int opt = sc.nextInt();
             switch (opt) {
                 case 1:
@@ -244,12 +276,23 @@ public class AddressBookManager {
                     viewPersonByState();
                     break;
                 case 5:
-                    viewPersonsByCityOrState();
+                    viewPersonsByCityState();
                     break;
                 case 6:
-                    countPersonsByCityOrState();
+                    countPersonsByCityState();
+                    break;
                 case 7:
                     sortAlphabetically();
+                    break;
+                case 8:
+                    sortCityStateZip();
+                    break;
+                case 9:
+                    writeAddressBookInFiles();
+                    break;
+                case 10:
+                    readAddressBookInFiles();
+                    break;
                 case 0:
                     conditon = false;
                     break;
@@ -262,4 +305,7 @@ public class AddressBookManager {
 
 
 }
+
+
+
 
